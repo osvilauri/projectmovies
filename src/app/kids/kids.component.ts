@@ -52,6 +52,7 @@ export class KidsComponent implements OnInit {
       api_key: API_KEY,
       sort_by: this.sorter.asc,
       include_video: false,
+      include_adult: false,
       query: event
     };
     if(!params.query){
