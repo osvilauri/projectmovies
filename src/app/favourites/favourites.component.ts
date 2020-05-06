@@ -43,6 +43,9 @@ export class FavouritesComponent implements OnInit {
         this.movieData = res.results;
       } else {
         this.movieData = [];
+        this.movieTrending = [];
+        this.movieStarred =[];
+        this.favouriteData = [];
         this.movieData = res.results;
       }
 
