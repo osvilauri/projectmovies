@@ -20,3 +20,9 @@ export interface StarredModel {
     idMovie: number,
     isStarred: boolean
 }
+
+export interface Menu {
+    name: string;
+    url: string;
+    visible: boolean;
+}

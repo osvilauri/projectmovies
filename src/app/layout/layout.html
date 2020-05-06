@@ -1,7 +1,7 @@
 <nz-layout class="layout">
     <nz-header>
         <div *ngIf="!isMobile; else mobileTemplate">
-            <div [ngTemplateOutlet]="menu"></div>
+            <div [ngTemplateOutlet]="menu" ></div>
         </div>
         <ng-template #mobileTemplate>
             <div nz-row nzType="flex">
@@ -16,18 +16,23 @@
         </ng-template>
         <ng-template #menu>
             <div nz-menu [nzTheme]="isMobile ? 'light' : 'dark'" [nzMode]="isMobile ? 'vertical' : 'horizontal'" >
-                <nz-row nzType="flex" nzJustify="start" >
-                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/">Theaters</nz-col>
-                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/movies">Popular</nz-col>
-                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/kids">Kids</nz-col>
-                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/favourites">Favourites</nz-col>
-                    <nz-col nzXs="24" nzMd="6" nzLg="14" nz-menu-item></nz-col>
+                <nz-row nzType="flex" nzJustify="center" [ngStyle]="{textAlign: !isMobile ? 'center': 'start'}">
+                    <nz-col
+                            *ngFor="let item of menuLayout"
+                            nzXs="24"
+                            nzMd="4"
+                            nzLg="2"
+                            nz-menu-item
+                            [routerLink]="item.visible ? item.url: ''"
+                            [ngStyle]="{display: !item.visible ? 'none' : null }"
+                    >
+                        {{item.name}}
+                    </nz-col>
                     <nz-col nzXs="24" nzMd="2" nzLg="2">
-                        <span><i nz-icon nzType="tool" nzTheme="outline"></i> Aditional settings </span>
+                        <span (click)="showOptions()" style="cursor:pointer;"><i nz-icon nzType="tool" nzTheme="outline"></i> Settings </span>
                     </nz-col>
                 </nz-row>
             </div>
-
         </ng-template>
     </nz-header>
     <nz-content>
@@ -40,3 +45,50 @@
     </nz-content>
     <nz-footer>Basic Exercise ©2020 Implement By Angular</nz-footer>
 </nz-layout>
+
+<nz-modal
+        [(nzVisible)]="isVisible"
+        nzTitle="Menu personalization"
+        (nzOnCancel)="showOptions()"
+        [nzFooter]="templateFooter"
+>
+    <nz-row nzType="flex" nzJustify="center" class="menu-personalization">
+        <nz-col nzSpan="24">
+            <span>Please select your menu to hide</span>
+            <br/>
+            <br/>
+            <nz-tag *ngFor="let item of menuLayout; let i = index"
+                    nzMode="checkable"
+                    [nzChecked]="item.visible"
+                    (nzCheckedChange)="checkChange($event, i)"
+            >
+                {{item.name}}
+            </nz-tag>
+        </nz-col>
+    </nz-row>
+    <nz-row nzType="flex" nzJustify="start" class="menu-personalization">
+        <nz-col nzSpan="12">
+            <span> Please select menu to change name</span>
+            <br/>
+            <br/>
+            <nz-select [ngModel]="menuLayout[0].name"  (ngModelChange)="selectedIndex($event)" style="width: 192px">
+                <nz-option *ngFor="let item of menuLayout; let i = index" [nzValue]="i" [nzLabel]="item.name" ></nz-option>
+            </nz-select>
+        </nz-col>
+        <nz-col nzSpan="10">
+            <nz-input-group nzSearch nzSize="default" [nzAddOnAfter]="suffixButton" style="margin-top: 43px">
+               <input type="text" nz-input placeholder="modify the name" [(ngModel)]="nameMenu"/>
+            </nz-input-group>
+            <ng-template #suffixButton>
+                <button nz-button nzType="primary" nzSearch (click)="saveMenu(indexMenu, nameMenu)"><i nz-icon nzType="check"></i></button>
+            </ng-template>
+        </nz-col>
+    </nz-row>
+</nz-modal>
+<ng-template #templateFooter>
+    <nz-row nzType="flex" nzJustify="end">
+        <nz-col nzSpan="24">
+            <button nz-button nzType="default" (click)="showOptions()">Close</button>
+        </nz-col>
+    </nz-row>
+</ng-template>

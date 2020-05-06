@@ -4,6 +4,7 @@ import {MovieService} from "../../services/movie.service";
 import API_KEY from "../api.key";
 import {MovieapiService} from "../../services/movieapi.service";
 import {NzNotificationService} from "ng-zorro-antd";
+import {SearchService} from "../../services/search.service";
 
 
 @Component({
@@ -19,7 +20,12 @@ export class MoviesComponent implements OnInit {
     asc: 'popularity.asc',
     desc: 'popularity.desc'
   };
-  constructor(private movies: MovieService, private favourite: MovieapiService, private notification: NzNotificationService) { }
+  constructor(
+      private movies: MovieService,
+      private favourite: MovieapiService,
+      private notification: NzNotificationService,
+      private search: SearchService
+  ) { }
 
   ngOnInit(): void {
     this.listMovies();
@@ -39,8 +45,23 @@ export class MoviesComponent implements OnInit {
     } , error =>{ console.log(error); this.spinning = false;})
   }
 
-  onSearch(event):void {
-    console.log(event)
+  onSearch(event) {
+    this.spinning = true;
+    const params: any = {
+      page: this.page,
+      api_key: API_KEY,
+      sort_by: this.sorter.asc,
+      include_video: false,
+      query: event
+    };
+    if(!params.query){
+      this.listMovies()
+    } else {
+      this.search.list({params}).subscribe((res: any) => {
+        this.movieData = res.results;
+        this.spinning = false;
+      } , error =>{ console.log(error); this.spinning = false;})
+    }
   }
 
   setFavourite($event: any) {

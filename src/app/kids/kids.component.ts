@@ -4,6 +4,7 @@ import {MovieModel} from "../../models/movie.model";
 import {MovieService} from "../../services/movie.service";
 import {MovieapiService} from "../../services/movieapi.service";
 import {NzNotificationService} from "ng-zorro-antd";
+import {SearchService} from "../../services/search.service";
 
 @Component({
   selector: 'app-kids',
@@ -25,7 +26,12 @@ export class KidsComponent implements OnInit {
     include_video: false
   };
 
-  constructor(private movies: MovieService, private favourite: MovieapiService, private notification: NzNotificationService) { }
+  constructor(
+      private movies: MovieService,
+      private favourite: MovieapiService,
+      private notification: NzNotificationService,
+      private search: SearchService
+  ) { }
 
   ngOnInit(): void {
     this.listKids();
@@ -39,8 +45,23 @@ export class KidsComponent implements OnInit {
     } , error => {console.log(error); this.spinning = false})
   }
 
-  onSearch(event):void {
-    console.log(event)
+  onSearch(event) {
+    this.spinning = true;
+    const params: any = {
+      page: 1,
+      api_key: API_KEY,
+      sort_by: this.sorter.asc,
+      include_video: false,
+      query: event
+    };
+    if(!params.query){
+      this.listKids()
+    } else {
+      this.search.list({params}).subscribe((res: any) => {
+        this.movieData = res.results;
+        this.spinning = false;
+      } , error =>{ console.log(error); this.spinning = false;})
+    }
   }
 
   setFavourite($event: any) {

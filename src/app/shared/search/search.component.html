@@ -1,7 +1,7 @@
 <div nz-row nzType="flex" nzJustify="center">
    <nz-col nzSpan="24" class="search-input">
        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-           <input type="text" nz-input placeholder="input search text" [(ngModel)]="inputValue"  />
+           <input type="text" nz-input placeholder="input search text" [(ngModel)]="inputValue" (keydown.enter)="searchText.emit(this.inputValue)" />
        </nz-input-group>
    </nz-col>
     <ng-template #suffixIconButton>

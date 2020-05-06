@@ -30,7 +30,7 @@ export class FavouritesComponent implements OnInit {
     this.listFav();
   }
 
-  listFav(){
+  listFav(initial: boolean = true){
     this.spinning = true;
     const params: any = {
       api_key: API_KEY,
@@ -39,7 +39,13 @@ export class FavouritesComponent implements OnInit {
       include_video: false
     };
     this.movies.list({ params }).subscribe((res: any) => {
-      this.movieData = res.results;
+      if(initial === true){
+        this.movieData = res.results;
+      } else {
+        this.movieData = [];
+        this.movieData = res.results;
+      }
+
       this.listTrend();
       this.getStarred();
     } , error => {console.log(error); this.spinning = false;});
@@ -68,7 +74,14 @@ export class FavouritesComponent implements OnInit {
   }
 
   onSearch(event):void {
-    console.log(event)
+    this.spinning = true;
+    if(event){
+      this.favouriteData = this.favouriteData.filter( (item: MovieModel) => item.title === event);
+      console.log(this.favouriteData);
+      this.spinning = false;
+    } else {
+      this.listFav(false)
+    }
   }
 
  getFavouriteMovie() {
