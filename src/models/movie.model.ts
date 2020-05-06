@@ -14,3 +14,9 @@ export interface MovieModel {
     vote_average: number
     vote_count: number
 }
+
+export interface StarredModel {
+    _id: string,
+    idMovie: number,
+    isStarred: boolean
+}

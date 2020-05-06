@@ -1,0 +1,21 @@
+<div>
+   <nz-card nzHoverable style="width:170px; margin-top: 12px; margin-left: 15px" [nzCover]="coverTemplate" (click)="viewDetails()">
+       <nz-card-meta [nzTitle]="item.title" nzDescription="www.instagram.com"></nz-card-meta>
+   </nz-card>
+
+    <ng-template #coverTemplate>
+        <img alt="example"
+             [src]="item.poster_path ?
+                    'https://image.tmdb.org/t/p/w185_and_h278_bestv2/'+item.poster_path :
+                    'https://www.amulyamica.com/files/noimage.jpg'"
+             [ngStyle]="{ 'height': !item.poster_path ?  '255px' : ''}"
+        />
+    </ng-template>
+    <app-details
+            [starredSection]="starred"
+            [item]="item"
+            [isVisible]="this.visible"
+            (handleCancel)="viewDetails()"
+            (setFav)="favItem.emit($event)"
+    ></app-details>
+</div>

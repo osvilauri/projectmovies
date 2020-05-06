@@ -1,0 +1,42 @@
+<nz-layout class="layout">
+    <nz-header>
+        <div *ngIf="!isMobile; else mobileTemplate">
+            <div [ngTemplateOutlet]="menu"></div>
+        </div>
+        <ng-template #mobileTemplate>
+            <div nz-row nzType="flex">
+               <nz-col class="mobile-menu">
+                   <span (click)="open()"><i nz-icon [nzType]="menuTag" nzTheme="outline"></i></span>
+               </nz-col>
+
+            </div>
+            <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="Basic Drawer" (nzOnClose)="close()">
+                <div [ngTemplateOutlet]="menu"></div>
+            </nz-drawer>
+        </ng-template>
+        <ng-template #menu>
+            <div nz-menu [nzTheme]="isMobile ? 'light' : 'dark'" [nzMode]="isMobile ? 'vertical' : 'horizontal'" >
+                <nz-row nzType="flex" nzJustify="start" >
+                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/">Theaters</nz-col>
+                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/movies">Popular</nz-col>
+                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/kids">Kids</nz-col>
+                    <nz-col nzXs="24" nzMd="4" nzLg="2" nz-menu-item routerLink="/favourites">Favourites</nz-col>
+                    <nz-col nzXs="24" nzMd="6" nzLg="14" nz-menu-item></nz-col>
+                    <nz-col nzXs="24" nzMd="2" nzLg="2">
+                        <span><i nz-icon nzType="tool" nzTheme="outline"></i> Aditional settings </span>
+                    </nz-col>
+                </nz-row>
+            </div>
+
+        </ng-template>
+    </nz-header>
+    <nz-content>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+            <nz-breadcrumb-item>List</nz-breadcrumb-item>
+            <nz-breadcrumb-item>App</nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <div class="inner-content"><router-outlet></router-outlet></div>
+    </nz-content>
+    <nz-footer>Basic Exercise ©2020 Implement By Angular</nz-footer>
+</nz-layout>

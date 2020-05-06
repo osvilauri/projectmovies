@@ -1,0 +1,19 @@
+<div>
+    <div>
+        <app-search (searchText)="onSearch($event)"></app-search>
+    </div>
+    <nz-spin [nzSpinning]="spinning">
+        <div *ngIf="movieData; else emptyTemplate" nz-row nzType="flex" nzJustify="start" class="content-cards">
+            <nz-col *ngFor="let item of movieData"  nzXs="24"  nzMd="12" nzLg="4">
+                <app-card [item]="item" (favItem)="setFavourite($event)"></app-card>
+            </nz-col>
+        </div>
+        <ng-template #emptyTemplate>
+            <nz-row nzType="flex" nzAlign="middle" nzJustify="center">
+                <nz-col nzXs="24">
+                    <nz-empty></nz-empty>
+                </nz-col>
+            </nz-row>
+        </ng-template>
+    </nz-spin>
+</div>

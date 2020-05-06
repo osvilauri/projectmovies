@@ -14,30 +14,39 @@ import {
   NzBreadCrumbModule,
   NzGridModule,
   NzLayoutModule,
-  NzMenuModule
+  NzMenuModule, NzSpinModule
 } from "ng-zorro-antd";
 import {MovieapiService} from "../services/movieapi.service";
-import {ExternalapiService} from "../services/externalapi.service";
+import {LayoutModule} from "./layout/layout.module";
+import {MoviesModule} from "./movies/movies.module";
+import {TheatersModule} from "./theaters/theaters.module";
+import {SharedModule} from "./shared/shared.module";
+import {TrendingService} from "../services/trending.service";
+import {SearchService} from "../services/search.service";
+import {MovieService} from "../services/movie.service";
+
+
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NzLayoutModule,
-    NzGridModule,
-    NzBreadCrumbModule,
-    NzMenuModule,
+    NzSpinModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    LayoutModule,
+    MoviesModule,
+    TheatersModule,
+    SharedModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }, MovieapiService,ExternalapiService],
+  providers: [{ provide: NZ_I18N, useValue: en_US }, MovieapiService,TrendingService,MovieService,SearchService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

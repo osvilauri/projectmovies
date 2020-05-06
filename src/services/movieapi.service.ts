@@ -8,18 +8,13 @@ import { map, catchError, tap } from 'rxjs/operators';
 })
 export class MovieapiService {
   apiUrl = 'http://localhost:3000/';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type':  'application/json'
-    })
-  };
-  private extractData(res: Response) {
-    return res || { };
-  }
+
 
   constructor(private http: HttpClient) {
 
   }
+
+  // Basic endpoints to connect with mongo db
 
   getStarred(): Observable<any> {
     return this.http.get(this.apiUrl+'starred_movies')

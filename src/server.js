@@ -22,12 +22,12 @@ app.listen( PORT, () => MongoClient.connect(mongodbUrl,{useUnifiedTopology:true,
         console.log('Connected to Mongo Database');
         db = client.db('sampledb');
         collection = db.collection('starred_movies');
-        console.log('Connected to database' + db + ' and collection ' + collection);
+        console.log('Connected to mongo database');
     })
 );
 
 app.get("/", (req,res)=>{
-    res.send('Connected to Server')
+    res.send('Server to connect with mongo')
 });
 
 // Basic operations for MongoDB

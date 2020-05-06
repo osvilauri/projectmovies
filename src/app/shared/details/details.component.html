@@ -1,0 +1,55 @@
+<div nz-row nzType="flex" nzJustify="center">
+    <nz-modal
+            [(nzVisible)]="isVisible"
+            [nzTitle]="item.title"
+            (nzOnCancel)="handleCancel.emit(isVisible)"
+            [nzFooter]="footerTemplate"
+    >
+        <div [ngTemplateOutlet]="movieDetails"></div>
+        <ng-template #footerTemplate>
+            <nz-row nzType="flex" nzJustify="end">
+                <button nz-button nzType="default" (click)="handleCancel.emit(isVisible)">Close</button>
+            </nz-row>
+        </ng-template>
+    </nz-modal>
+    <ng-template #movieDetails>
+        <nz-row nzType="flex" nzJustify="space-between">
+            <nz-col nzXs="24" nzMd="12">
+                <img alt="example"
+                     [src]="item.poster_path ?
+                    'https://image.tmdb.org/t/p/w185_and_h278_bestv2/'+item.poster_path :
+                    'https://www.amulyamica.com/files/noimage.jpg'"
+                     [ngStyle]="{ 'height': !item.poster_path ?  '255px' : '', 'margin-bottom':'12px'}"
+                />
+                <nz-row *ngIf="!starredSection" nzType="flex" nzJustify="start">
+                    <nz-col nzXs="24" nzMd="20" style="text-align: center">
+                        <button nz-button nzType="primary" (click)="setFav.emit(item.id)">
+                            <i nz-icon nzType="check-square" nzTheme="outline"></i>Set as favourite
+                        </button>
+                    </nz-col>
+                </nz-row>
+            </nz-col>
+            <nz-col nzXs="24" nzMd="12">
+                <nz-row class="details">
+                    <nz-col nzSpan="24">
+                        <h2 class="details--title">{{item.original_title}}</h2>
+                        <nz-row class="details--lang">
+                            <nz-col nzSpan="12">lang: {{item.original_language}}</nz-col>
+                            <nz-col nzSpan="12">genre: {{item.genre_ids}}</nz-col>
+                        </nz-row>
+                    </nz-col>
+                    <nz-col nzSpan="24">
+                        <span class="details--overview-title">Overview:</span>
+                        <p class="details--overview-text">{{item.overview}}</p>
+                    </nz-col>
+                    <nz-col nzSpan="24">
+                        <span class="details--popularity">Popularity: {{item.popularity}}</span>
+                    </nz-col>
+                    <nz-col nzSpan="24">
+                        <span class="details--popularity">Vote Average: {{item.vote_average}}</span>
+                    </nz-col>
+                </nz-row>
+            </nz-col>
+        </nz-row>
+    </ng-template>
+</div>

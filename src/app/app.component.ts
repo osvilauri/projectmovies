@@ -1,16 +1,20 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
+import { NavigationCancel, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import {MovieapiService} from "../services/movieapi.service";
-import {ExternalapiService} from "../services/externalapi.service";
 import {MovieModel} from "../models/movie.model";
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: ` 
+    <nz-spin [nzSpinning]="spinning" style="min-height: 190px;">
+      <router-outlet></router-outlet>
+    </nz-spin>`,
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, AfterViewInit{
   title = 'projectmovies';
-  movieData: MovieModel;
+  spinning = false;
+
   get isMobile() {
     return this.size && this.size < 768;
   }
@@ -19,47 +23,17 @@ export class AppComponent implements OnInit{
   onWindowResize() {
     this.size = document.querySelector('body').offsetWidth;
   }
-  constructor( private movie: MovieapiService, private externalapi: ExternalapiService){}
-  ngOnInit() {
-    // fetch("http://localhost:3000/favourites")
-    //     .then(response => response.json())
-    //     .then(data => console.log(data))
-    //     .catch( error => console.log(error));
-    this.movie.getStarred().subscribe(
-        (res) => {
-          console.log(res);
-          },
-        error =>{
-          console.log(error)
-    });
+  constructor(private router: Router){}
+    ngOnInit() {}
 
-    this.getByid(1);
-
-    this.list();
-
-    // this.movie.postStarred(data).subscribe(
-    //     (res) => {
-    //       console.log(res);
-    //     },
-    //     error =>{
-    //       console.log(error)
-    //     });
-  }
-
-  getByid(id) {
-    this.movie.getStarredId(id).subscribe(
-        (res) => {
-         console.log(res)
-        },
-        error =>{
-          console.log(error)
+    ngAfterViewInit(): void {
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.spinning = true;
+            } else if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
+                this.spinning = false;
+            }
         });
-  }
+    }
 
-  list(){
-         this.externalapi.getMovies().subscribe((res: any) => {
-             this.movieData = res.results;
-             console.log(this.movieData)
-         } , error => console.log(error))
-  }
 }
